@@ -16,11 +16,14 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: .ruby-version
+          ruby-version: 2.7.3  # 明示的にRubyバージョンを指定
           bundler-cache: true
 
-      - name: Set executable permissions for bin scripts
-        run: chmod +x bin/*
+      - name: Install brakeman
+        run: gem install brakeman  # brakemanが必要な場合はインストール
+
+      - name: Set executable permissions for bin/brakeman
+        run: chmod +x bin/brakeman  # 必要なスクリプトにのみ権限を付与
 
       - name: Scan for common Rails security vulnerabilities using static analysis
         run: bin/brakeman --no-pager
@@ -35,11 +38,11 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: .ruby-version
+          ruby-version: 2.7.3
           bundler-cache: true
 
-      - name: Set executable permissions for bin scripts
-        run: chmod +x bin/*
+      - name: Set executable permissions for bin/importmap
+        run: chmod +x bin/importmap  # 必要なスクリプトにのみ権限を付与
 
       - name: Scan for security vulnerabilities in JavaScript dependencies
         run: bin/importmap audit
@@ -53,11 +56,11 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: .ruby-version
+          ruby-version: 2.7.3
           bundler-cache: true
 
-      - name: Set executable permissions for bin scripts
-        run: chmod +x bin/*
+      - name: Set executable permissions for bin/rubocop
+        run: chmod +x bin/rubocop  # 必要なスクリプトにのみ権限を付与
 
       - name: Lint code for consistent style
         run: bin/rubocop -f github
@@ -85,11 +88,11 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: .ruby-version
+          ruby-version: 3.3.6
           bundler-cache: true
 
-      - name: Set executable permissions for bin scripts
-        run: chmod +x bin/*
+      - name: Set executable permissions for bin/rails
+        run: chmod +x bin/rails  # 必要なスクリプトにのみ権限を付与
 
       - name: Run tests
         env:
