@@ -91,6 +91,9 @@ jobs:
         with:
           ruby-version: 3.3.6  # 統一されたRubyバージョン
           bundler-cache: true
+          
+      - name: Run RuboCop
+        run: bundle exec rubocop
         
       - name: Install dependencies
         run: gem install bundler && bundle install  # 必要なGemをインストール
