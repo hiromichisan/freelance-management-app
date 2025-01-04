@@ -18,6 +18,7 @@ jobs:
         with:
           ruby-version: 3.3.6  # 統一されたRubyバージョン
           bundler-cache: true
+          ruby-path: C:\Ruby33-x64\bin
 
       - name: Install brakeman
         run: gem install brakeman  # brakemanをインストール
@@ -40,6 +41,7 @@ jobs:
         with:
           ruby-version: 3.3.6  # 統一されたRubyバージョン
           bundler-cache: true
+          ruby-path: C:\Ruby33-x64\bin
 
       - name: Set executable permissions for bin/importmap
         run: chmod +x bin/importmap  # 必要なスクリプトにのみ権限を付与
@@ -58,6 +60,7 @@ jobs:
         with:
           ruby-version: 3.3.6  # 統一されたRubyバージョン
           bundler-cache: true
+          ruby-path: C:\Ruby33-x64\bin
 
       - name: Set executable permissions for bin/rubocop
         run: chmod +x bin/rubocop  # 必要なスクリプトにのみ権限を付与
@@ -90,6 +93,7 @@ jobs:
         with:
           ruby-version: 3.3.6  # 統一されたRubyバージョン
           bundler-cache: true
+          ruby-path: C:\Ruby33-x64\bin
 
       - name: Set executable permissions for bin/rails
         run: chmod +x bin/rails  # 必要なスクリプトにのみ権限を付与
