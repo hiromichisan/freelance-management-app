@@ -16,11 +16,11 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: 2.7.3  # 明示的にRubyバージョンを指定
+          ruby-version: 3.3.6  # 明示的にRubyバージョンを指定
           bundler-cache: true
 
       - name: Install brakeman
-        run: gem install brakeman  # brakemanが必要な場合はインストール
+        # run: gem install brakeman  # brakemanが必要な場合はインストール
 
       - name: Set executable permissions for bin/brakeman
         run: chmod +x bin/brakeman  # 必要なスクリプトにのみ権限を付与
