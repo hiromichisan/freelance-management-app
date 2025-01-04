@@ -92,8 +92,12 @@ jobs:
           ruby-version: 3.3.6  # 統一されたRubyバージョン
           bundler-cache: true
 
-      - name: Lint code for consistent style
+      - name: test code for consistent style
         run: bin/rubocop -a
+
+      - name: Set executable permissions for bin/rubocop
+        run: chmod +x bin/rubocop  # 必要なスクリプトにのみ権限を付与
+
 
       - name: Install dependencies
         run: gem install bundler && bundle install  # 必要なGemをインストール
