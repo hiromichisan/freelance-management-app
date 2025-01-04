@@ -65,7 +65,6 @@ jobs:
 
       - name: Lint code for consistent style
         run: bin/rubocop -f github
-
   test:
     runs-on: ubuntu-latest  # これを適切な環境に変更（例：windows-latest）
 
@@ -80,43 +79,40 @@ jobs:
         options: --health-cmd="pg_isready" --health-interval=10s --health-timeout=5s --health-retries=3
 
     steps:
-      - name: Install packages
-        run: sudo apt-get update && sudo apt-get install --no-install-recommends -y build-essential git libpq-dev pkg-config google-chrome-stable
+    - name: Install packages
+      run: sudo apt-get update && sudo apt-get install --no-install-recommends -y build-essential git libpq-dev pkg-config google-chrome-stable
 
-      - name: Checkout code
-        uses: actions/checkout@v4
+    - name: Checkout code
+      uses: actions/checkout@v4
 
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: 3.3.6  # 統一されたRubyバージョン
-          bundler-cache: true
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: 3.3.6  # 統一されたRubyバージョン
+        bundler-cache: true
 
-      - name: Verify Ruby installation
-        run: ruby -v  # Rubyのインストールバージョンを確認
+    - name: Install dependencies
+      run: gem install bundler && bundle install  # 必要なGemをインストール
 
-      - name: Install dependencies
-        run: gem install bundler && bundle install  # 必要なGemをインストール
+    - name: Run rubocop for code style checks
+      run: bundle exec rubocop -a  # rubocop を bundle exec で実行
 
-      - name: Run rubocop for code style checks
-        run: bundle exec rubocop -a  # rubocop を bundle exec で実行
+    - name: Set executable permissions for bin/rails
+      run: chmod +x bin/rails  # 必要なスクリプトにのみ権限を付与
 
-      - name: Set executable permissions for bin/rubocop
-        run: chmod +x bin/rubocop  # 必要なスクリプトにのみ権限を付与
+    - name: Prepare test database
+      run: bin/rails db:create  # データベースを作成
 
-      - name: Set executable permissions for bin/rails
-        run: chmod +x bin/rails  # 必要なスクリプトにのみ権限を付与
-        
-      - name: Run tests
-        env:
-          RAILS_ENV: test
-          DATABASE_URL: postgres://postgres:postgres@localhost:5432
-        run: bin/rails db:test:prepare test test:system --verbose  # 詳細なデバッグ情報を表示
+    - name: Prepare the test environment
+      run: bin/rails db:test:prepare  # テスト環境を準備
 
-      - name: Keep screenshots from failed system tests
-        uses: actions/upload-artifact@v4
-        if: failure()
-        with:
-          name: screenshots
-          path: ${{ github.workspace }}/tmp/screenshots
-          if-no-files-found: ignore
+    - name: Run system tests
+      run: bin/rails test test:system  # システムテストを実行
+
+    - name: Keep screenshots from failed system tests
+      uses: actions/upload-artifact@v4
+      if: failure()
+      with:
+        name: screenshots
+        path: ${{ github.workspace }}/tmp/screenshots
+        if-no-files-found: ignore
