@@ -7,7 +7,7 @@ on:
 
 jobs:
   scan_ruby:
-    runs-on: windows-latest
+    runs-on: windows-latest  # これを適切な環境に変更（例：windows-latest）
 
     steps:
       - name: Checkout code
@@ -18,7 +18,6 @@ jobs:
         with:
           ruby-version: 3.3.6  # 統一されたRubyバージョン
           bundler-cache: true
-          ruby-path: C:\Ruby33-x64\bin
 
       - name: Install brakeman
         run: gem install brakeman  # brakemanをインストール
@@ -30,7 +29,7 @@ jobs:
         run: bin/brakeman --no-pager
 
   scan_js:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest  # これを適切な環境に変更（例：windows-latest）
 
     steps:
       - name: Checkout code
@@ -41,7 +40,6 @@ jobs:
         with:
           ruby-version: 3.3.6  # 統一されたRubyバージョン
           bundler-cache: true
-          ruby-path: C:\Ruby33-x64\bin
 
       - name: Set executable permissions for bin/importmap
         run: chmod +x bin/importmap  # 必要なスクリプトにのみ権限を付与
@@ -50,7 +48,8 @@ jobs:
         run: bin/importmap audit
 
   lint:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest  # これを適切な環境に変更（例：windows-latest）
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -60,7 +59,6 @@ jobs:
         with:
           ruby-version: 3.3.6  # 統一されたRubyバージョン
           bundler-cache: true
-          ruby-path: C:\Ruby33-x64\bin
 
       - name: Set executable permissions for bin/rubocop
         run: chmod +x bin/rubocop  # 必要なスクリプトにのみ権限を付与
@@ -69,7 +67,7 @@ jobs:
         run: bin/rubocop -f github
 
   test:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest  # これを適切な環境に変更（例：windows-latest）
 
     services:
       postgres:
@@ -93,7 +91,6 @@ jobs:
         with:
           ruby-version: 3.3.6  # 統一されたRubyバージョン
           bundler-cache: true
-          ruby-path: C:\Ruby33-x64\bin
 
       - name: Set executable permissions for bin/rails
         run: chmod +x bin/rails  # 必要なスクリプトにのみ権限を付与
