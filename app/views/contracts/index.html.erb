@@ -1,0 +1,22 @@
+<h1>Your Contracts</h1>
+<%= link_to 'New Contract', new_contract_path, class: 'btn btn-primary' %>
+<table class="table">
+  <thead>
+    <tr>
+      <th>Title</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @contracts.each do |contract| %>
+      <tr>
+        <td><%= contract.title %></td>
+        <td>
+          <%= link_to 'Show', contract_path(contract), class: 'btn btn-info' %>
+          <%= link_to 'Edit', edit_contract_path(contract), class: 'btn btn-warning' %>
+          <%= link_to 'Delete', contract_path(contract), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger' %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

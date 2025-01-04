@@ -1,0 +1,6 @@
+<h1>Welcome, <%= current_user.email %></h1>
+<ul>
+  <li><%= link_to '契約書', contracts_path %></li>
+  <li><%= link_to '請求書', invoices_path %></li>
+  <li><%= link_to '経費管理', expenses_path %></li>
+</ul>
