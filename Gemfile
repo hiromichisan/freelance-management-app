@@ -60,6 +60,7 @@ group :test do
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
   gem "capybara"
   gem "selenium-webdriver"
+  # Static analysis for security vulnerabilities [https://brakemanscanner.org/]
 end
 
 gem "devise"
