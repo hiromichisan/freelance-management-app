@@ -92,18 +92,17 @@ jobs:
           ruby-version: 3.3.6  # 統一されたRubyバージョン
           bundler-cache: true
 
-      - name: test code for consistent style
-        run: bin/rubocop -a
-
       - name: Set executable permissions for bin/rubocop
         run: chmod +x bin/rubocop  # 必要なスクリプトにのみ権限を付与
 
-
-      - name: Install dependencies
-        run: gem install bundler && bundle install  # 必要なGemをインストール
-
       - name: Set executable permissions for bin/rails
         run: chmod +x bin/rails  # 必要なスクリプトにのみ権限を付与
+
+      - name: Install dependencies
+        run: gem install bundler && bundle install  # 必要なGemをインストール   
+
+      - name: test code for consistent style
+        run: bin/rubocop -a  
 
       - name: Run tests
         env:
