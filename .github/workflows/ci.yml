@@ -91,6 +91,9 @@ jobs:
         with:
           ruby-version: 3.3.6  # 統一されたRubyバージョン
           bundler-cache: true
+        
+      - name: Install dependencies
+        run: gem install bundler && bundle install  # 必要なGemをインストール
 
       - name: Set executable permissions for bin/rails
         run: chmod +x bin/rails  # 必要なスクリプトにのみ権限を付与
