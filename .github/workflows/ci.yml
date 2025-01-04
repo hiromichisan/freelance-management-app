@@ -65,6 +65,7 @@ jobs:
 
       - name: Lint code for consistent style
         run: bin/rubocop -f github
+        
   test:
     runs-on: ubuntu-latest  # これを適切な環境に変更（例：windows-latest）
 
@@ -75,8 +76,8 @@ jobs:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
         ports:
-          - 5432:5432
-        options: --health-cmd="pg_isready" --health-interval=10s --health-timeout=5s --health-retries=3
+        - 5432:5432
+      options: --health-cmd="pg_isready" --health-interval=10s --health-timeout=5s --health-retries=3
 
     steps:
     - name: Install packages
@@ -100,14 +101,11 @@ jobs:
     - name: Set executable permissions for bin/rails
       run: chmod +x bin/rails  # 必要なスクリプトにのみ権限を付与
 
-    - name: Prepare test database
-      run: bin/rails db:create  # データベースを作成
-
-    - name: Prepare the test environment
-      run: bin/rails db:test:prepare  # テスト環境を準備
-
-    - name: Run system tests
-      run: bin/rails test test:system  # システムテストを実行
+    - name: Run tests
+      env:
+        RAILS_ENV: test
+        DATABASE_URL: postgres://postgres:postgres@localhost:5432  # 修正済み
+      run: bin/rails db:test:prepare test test:system
 
     - name: Keep screenshots from failed system tests
       uses: actions/upload-artifact@v4
