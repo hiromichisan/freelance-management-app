@@ -83,8 +83,9 @@ jobs:
 
       - name: Start PostgreSQL service
         shell: cmd
-        run: |
-         net start postgresql-x64-17 || echo "Service is already running, continuing..."
+        run: net start postgresql-x64-17 || echo "Service is already running, continuing..."
+        continue-on-error: true
+
 
       - name: Install Ruby
         uses: ruby/setup-ruby@v1
