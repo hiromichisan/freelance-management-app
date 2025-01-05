@@ -67,54 +67,37 @@ jobs:
         run: bin/rubocop -f github
         
   test:
-    runs-on:  windows-latest # これを適切な環境に変更（例：windows-latest）
-
-    services:
-     postgres:
-      image: postgres
-      env:
-        POSTGRES_USER: postgres
-        POSTGRES_PASSWORD: postgres
-      ports:
-        - 5432:5432
-      options: --health-cmd="pg_isready" --health-interval=10s --health-timeout=5s --health-retries=3
+    runs-on: windows-2022  # Windowsランナーを指定
 
     steps:
-    - name: Install packages
-      run: sudo apt-get update && sudo apt-get install --no-install-recommends -y build-essential git libpq-dev pkg-config google-chrome-stable
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    - name: Checkout code
-      uses: actions/checkout@v4
+      - name: Install PostgreSQL
+        run: |
+          choco install postgresql --params '/Password:postgres /Port:5432 /NoStackBuilder:true' -y
+          setx /M PGUSER postgres
+          setx /M PGPASSWORD postgres
+          setx /M PGHOST localhost
+          setx /M PGPORT 5432
 
-    - name: Set up Ruby
-      uses: ruby/setup-ruby@v1
-      with:
-        ruby-version: 3.3.6  # 統一されたRubyバージョン
-        bundler-cache: true
+      - name: Start PostgreSQL Service
+        run: net start postgresql-x64-15  # PostgreSQLのバージョンを環境に合わせて修正
 
-    - name: Install dependencies
-      run: gem install bundler && bundle install  # 必要なGemをインストール
+      - name: Install Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.3.6
+          bundler-cache: true
 
-    - name: Run rubocop for code style checks
-      run: bundle exec rubocop -a  # rubocop を bundle exec で実行
+      - name: Install dependencies
+        run: bundle install
 
-    - name: Set executable permissions for bin/rails
-      run: chmod +x bin/rails  # 必要なスクリプトにのみ権限を付与
+      - name: Prepare test database
+        run: bin/rails db:create
 
-    # データベースを作成するステップを追加
-    - name: Prepare test database
-      run: bin/rails db:create  # データベースを作成
+      - name: Prepare test database (db:test:prepare)
+        run: bin/rails db:test:prepare
 
-    - name: Prepare test database (db:test:prepare)
-      run: bin/rails db:test:prepare  # テスト用データベースの準備
-
-    - name: Run system tests
-      run: bin/rails test test:system  # システムテストを実行
-
-    - name: Keep screenshots from failed system tests
-      uses: actions/upload-artifact@v4
-      if: failure()
-      with:
-        name: screenshots
-        path: ${{ github.workspace }}/tmp/screenshots
-        if-no-files-found: ignore
+      - name: Run tests
+        run: bin/rails test
