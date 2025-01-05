@@ -67,7 +67,7 @@ jobs:
         run: bin/rubocop -f github
         
   test:
-    runs-on: [ubuntu-latest, windows-latest]  # これを適切な環境に変更（例：windows-latest）
+    runs-on:  windows-latest # これを適切な環境に変更（例：windows-latest）
 
     services:
      postgres:
