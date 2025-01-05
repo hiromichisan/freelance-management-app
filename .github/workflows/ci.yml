@@ -81,8 +81,10 @@ jobs:
           setx /M PGHOST localhost
           setx /M PGPORT 5432
 
-      - name: Start PostgreSQL Service
-        run: net start postgresql-x64-17  # PostgreSQLのバージョンを環境に合わせて修正
+      - name: Start PostgreSQL service
+        shell: cmd
+        run: |
+         net start postgresql-x64-17 || echo "Service is already running, continuing..."
 
       - name: Install Ruby
         uses: ruby/setup-ruby@v1
